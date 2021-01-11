@@ -33,4 +33,4 @@ jobs:
           push: true
           tags: |
             hapewe/spigot:latest
-            hapewe/spigot:1.0.0
+            hapewe/spigot:1.16.4
