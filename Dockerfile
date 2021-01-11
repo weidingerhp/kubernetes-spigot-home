@@ -7,7 +7,9 @@ LABEL Hans-Peter Weidinger <weidinger.hp@gmail.com>
 
 COPY scripts/start.sh /opt/minecraft
 
-# also expose the rcon ports
+# also expose the RCon ports
 EXPOSE 25575:25575/tcp 25575:25575/udp
 
+# use the start.sh instead of the startup-program so we can
+# reliably set memory consumption
 ENTRYPOINT [ "/opt/minecraft/start.sh" ]
