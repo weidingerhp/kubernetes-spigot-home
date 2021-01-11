@@ -1,0 +1,60 @@
+# docker run -d -it -v /path/on/host:/data -e EULA=TRUE -p 25565:25565 --name mc itzg/minecraft-server
+# using spigot:
+# docker run -d -it -v /path/on/host:/mnt/minecraft -e EULA=TRUE -p 25565:25565 --name mc marcermarc/spigot
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minecraft-server
+  namespace: minecraft
+  labels:
+    app: minecraft-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: minecraft-server
+  template:
+    metadata:
+      labels:
+        app: minecraft-server
+    spec:
+      volumes:
+      - name: minecraft-data
+        persistentVolumeClaim:
+          claimName: minecraft-data-pvc
+      containers:
+      - name: minecraft-server
+        image: hapewe/spigot:latest
+#        image: busybox
+        resources:
+          limits:
+            memory: 4.5Gi
+          requests:
+            memory: 1.5Gi
+        env:
+          - name: HEAP
+            value: '4G'
+        ports:
+        - containerPort: 25565
+          name: minecraft-tcp
+          protocol: TCP
+        - containerPort: 25565
+          name: minecraft-udp
+          protocol: UDP
+        volumeMounts:
+          - name: minecraft-data
+            mountPath:  /mnt/minecraft
+        livenessProbe:
+          initialDelaySeconds: 420
+          periodSeconds: 20
+          tcpSocket:
+            port: 25565
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+               - key: kubernetes.io/arch
+                 operator: In
+                 values:
+                 - amd64
