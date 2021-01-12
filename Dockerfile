@@ -15,14 +15,7 @@ ARG VERSION=latest
 # Compile Start.java
 # Add user minecraft
 # ------------------------------
-RUN mkdir -p /tmp/buildtool /opt/minecraft /mnt/minecraft \
-  && apk add --update --no-cache --virtual=.build-dependencies git wget openjdk8 \
-  && cd /tmp/buildtool \
-  && wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar \
-  && java -Xmx1024M -jar BuildTools.jar --rev $VERSION \
-  && mv spigot-*.jar /opt/minecraft/spigot.jar \
-  && rm -rf /tmp/buildtool \
-  && apk del --no-cache .build-dependencies \
+RUN mkdir /opt/minecraft /mnt/minecraft \
   && apk add --no-cache openjdk8-jre-base \
   && adduser -D minecraft \
   && chown -R minecraft /mnt/minecraft \
@@ -50,6 +43,7 @@ USER minecraft
 # Add start script
 # ----------------
 COPY scripts/start.sh /opt/minecraft
+COPY spigot.jar /opt/minecraft/spigot.jar
 
 # ----------------
 # default heap size
