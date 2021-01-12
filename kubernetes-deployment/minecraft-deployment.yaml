@@ -49,12 +49,14 @@ spec:
           periodSeconds: 20
           tcpSocket:
             port: 25565
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-               - key: kubernetes.io/arch
-                 operator: In
-                 values:
-                 - amd64
+            
+# not needed any more - current image can run on amd64, arm64 and armv7 nodes
+#      affinity:
+#        nodeAffinity:
+#          requiredDuringSchedulingIgnoredDuringExecution:
+#            nodeSelectorTerms:
+#            - matchExpressions:
+#               - key: kubernetes.io/arch
+#                 operator: In
+#                 values:
+#                 - amd64
