@@ -1,6 +1,6 @@
 # kubernetes-spigot-home
 
-![Spigot](https://github.com/weidingerhp/kubernetes-spigot-home/workflows/ci/badge.svg)
+![docker-build](https://github.com/weidingerhp/kubernetes-spigot-home/workflows/docker-build/badge.svg)
 
 slight extension of @marcermark s version of the spigot server with deployment scripts for my kubernetes environment (nfs-server and mixed amd64, arm64 cluster)
 
