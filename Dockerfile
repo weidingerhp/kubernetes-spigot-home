@@ -35,11 +35,14 @@ EXPOSE 25575:25575/tcp 25575:25575/udp
 VOLUME ["/mnt/minecraft"]
 
 # ----------------
+# Set startup user
+# ----------------
+USER minecraft
+
+# ----------------
 # Add start script
 # ----------------
 COPY scripts/start.sh /opt/minecraft
-RUN chmod +x /opt/minecraft/start.sh
-
 
 # -----------------------------
 # copy jar from prev build-step
@@ -47,14 +50,9 @@ RUN chmod +x /opt/minecraft/start.sh
 COPY spigot.jar /opt/minecraft/spigot.jar
 
 # ----------------
-# Set startup user
-# ----------------
-USER minecraft
-
-# ----------------
 # default heap size
 # ----------------
 ENV HEAP=2G 
 
 
-ENTRYPOINT [ "/opt/minecraft/start.sh" ]
+ENTRYPOINT [ "/bin/sh", "/opt/minecraft/start.sh" ]
