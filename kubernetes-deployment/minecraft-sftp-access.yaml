@@ -59,7 +59,7 @@ spec:
           initialDelaySeconds: 10
           periodSeconds: 10
           tcpSocket:
-            port: 22
+            port: 2222
         volumeMounts:
           - name: minecraft-data-play
             subPath: .
