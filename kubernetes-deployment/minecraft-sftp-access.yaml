@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: openssh-server
+  namespace: minecraft
+  labels:
+    app: openssh-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: openssh-server
+  template:
+    metadata:
+      labels:
+        app: openssh-server
+    spec:
+      volumes:
+      - name: minecraft-data-play
+        persistentVolumeClaim:
+          claimName: minecraft-play-pvc
+      containers:
+      - name: openssh-server
+        image: linuxserver/openssh-server:latest
+        resources:
+          limits:
+            memory: 0.5Gi
+          requests:
+            memory: 0.5Gi
+        env:
+          - name: PUID
+            value: '1000'
+          - name: PGID
+            value: '1000'
+          - name: TZ
+            value: 'Europe/London'
+          # - name: PUBLIC_KEY
+          #   value: 'yourpublickey'
+          # - name: PUBLIC_KEY_FILE
+          #   value: '/path/to/file'
+          # - name: PUBLIC_KEY_DIR
+          #   value: '/path/to/directory/containing/_only_/pubkeys'
+          # - name: USER_PASSWORD_FILE
+          #   value: '/path/to/file'
+          - name: SUDO_ACCESS
+            value: 'true'
+          - name: PASSWORD_ACCESS
+            value: 'true'
+          - name: USER_NAME
+            value: 'user'
+          - name: USER_PASSWORD
+            value: 'password'
+
+        ports:
+        - containerPort: 2222
+          name: sftp-port
+          protocol: TCP
+        livenessProbe:
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          tcpSocket:
+            port: 22
+        volumeMounts:
+          - name: minecraft-data-play
+            subPath: .
+            mountPath:  /minecraft
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: openssh-server
+  namespace: minecraft
+  labels:
+    app: openssh-server
+spec:
+  ports:
+  - name: sftp-port
+    targetPort: 2222
+    port: 22
+    protocol: TCP
+  selector:
+    app: openssh-server
+  type: LoadBalancer
