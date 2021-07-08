@@ -15,9 +15,9 @@ ARG VERSION=latest
 # Compile Start.java
 # Add user minecraft
 # ------------------------------
-RUN mkdir /opt/minecraft /mnt/minecraft \
-  && apk add --no-cache openjdk8-jre-base \
-  && adduser -D minecraft \
+RUN mkdir /opt/minecraft /mnt/minecraft 
+RUN apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing openjdk16-jre 
+RUN adduser -D minecraft \
   && chown -R minecraft /mnt/minecraft \
   && chmod -R 777 /mnt/minecraft 
 
