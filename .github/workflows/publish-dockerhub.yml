@@ -55,3 +55,8 @@ jobs:
           tags: |
             hapewe/spigot:latest
             hapewe/spigot:${{env.VERSION}}
+
+      - name: Scan image
+        uses: azure/container-scan@v0
+        with:
+          image-name: hapewe/spigot:${{env.VERSION}}
