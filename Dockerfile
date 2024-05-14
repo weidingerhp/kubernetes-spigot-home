@@ -16,7 +16,7 @@ ARG VERSION=latest
 # Add user minecraft
 # ------------------------------
 RUN mkdir /opt/minecraft /mnt/minecraft 
-RUN apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing openjdk17-jre 
+RUN apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing openjdk21-jre 
 RUN adduser -D minecraft \
   && chown -R minecraft /mnt/minecraft \
   && chmod -R 777 /mnt/minecraft 
